@@ -63,5 +63,15 @@
         "title":  "Singleton",
         "category":  "design-pattern",
         "path":  "design-pattern/singleton-NOTES.md"
+    },
+    {
+        "title":  "자바 기본 개념 정리",
+        "category":  "java",
+        "path":  "java/java-01-basics.md"
+    },
+    {
+        "title":  "스프링 핵심 개념 + 요청 플로우",
+        "category":  "java",
+        "path":  "java/spring-01-concepts.md"
     }
 ]

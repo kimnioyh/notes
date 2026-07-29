@@ -19,7 +19,7 @@ foreach ($src in $copy.Keys) {
 }
 
 # 2) manifest.json 생성 (docs, design-pattern 하위 *.md 스캔)
-$manifest = foreach ($f in Get-ChildItem "$root\docs","$root\design-pattern" -Filter *.md -File -ErrorAction SilentlyContinue) {
+$manifest = foreach ($f in Get-ChildItem "$root\docs","$root\design-pattern","$root\java" -Filter *.md -File -ErrorAction SilentlyContinue) {
   $head = (Get-Content $f.FullName -TotalCount 30 -Encoding UTF8 | Where-Object { $_ -match '^\#\s+' } | Select-Object -First 1)
   $title = if ($head) { ($head -replace '^\#\s+','').Trim() } else { $f.BaseName }
   [pscustomobject]@{
