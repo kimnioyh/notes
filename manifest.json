@@ -80,9 +80,24 @@
         "path":  "java/java-01-basics.md"
     },
     {
+        "title":  "JPA 연관관계 매핑 (주인 · 양방향/단방향)",
+        "category":  "java",
+        "path":  "java/jpa-association-mapping.md"
+    },
+    {
+        "title":  "JPA Lazy Loading \u0026 LazyInitializationException",
+        "category":  "java",
+        "path":  "java/jpa-lazy-loading.md"
+    },
+    {
         "title":  "스프링 핵심 개념 + 요청 플로우",
         "category":  "java",
         "path":  "java/spring-01-concepts.md"
+    },
+    {
+        "title":  "스프링 테스트 생성자 주입 \u0026 @TestConstructor",
+        "category":  "java",
+        "path":  "java/spring-test-constructor-injection.md"
     },
     {
         "title":  "PowerShell 5.1의 인코딩·BOM 함정",
