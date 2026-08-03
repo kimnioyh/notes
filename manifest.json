@@ -1,5 +1,40 @@
 [
     {
+        "title":  "Claude Code — 훅(hook) vs 스킬(skill)",
+        "category":  "claude-code",
+        "path":  "claude-code/hooks-vs-skills.md"
+    },
+    {
+        "title":  "Design 01 — Observer (Pub-Sub)",
+        "category":  "design-pattern",
+        "path":  "design-pattern/design-01-observer.md"
+    },
+    {
+        "title":  "Design 02 — Singleton",
+        "category":  "design-pattern",
+        "path":  "design-pattern/design-02-singleton.md"
+    },
+    {
+        "title":  "워크북 — Observer (pub-sub) → Toast",
+        "category":  "design-pattern",
+        "path":  "design-pattern/observer-EXERCISE.md"
+    },
+    {
+        "title":  "Observer / Pub-Sub",
+        "category":  "design-pattern",
+        "path":  "design-pattern/observer-NOTES.md"
+    },
+    {
+        "title":  "워크북 — Singleton",
+        "category":  "design-pattern",
+        "path":  "design-pattern/singleton-EXERCISE.md"
+    },
+    {
+        "title":  "Singleton",
+        "category":  "design-pattern",
+        "path":  "design-pattern/singleton-NOTES.md"
+    },
+    {
         "title":  "D10 스터디 — Prisma 3-why 오너십 워크북",
         "category":  "docs",
         "path":  "docs/d10-study-prisma-3why.md"
@@ -33,36 +68,6 @@
         "title":  "🧩 D3 워크북 — 라이브러리 소비 + CRUD API + 결제 연결",
         "category":  "docs",
         "path":  "docs/WORKBOOK-D3.md"
-    },
-    {
-        "title":  "Design 01 — Observer (Pub-Sub)",
-        "category":  "design-pattern",
-        "path":  "design-pattern/design-01-observer.md"
-    },
-    {
-        "title":  "Design 02 — Singleton",
-        "category":  "design-pattern",
-        "path":  "design-pattern/design-02-singleton.md"
-    },
-    {
-        "title":  "워크북 — Observer (pub-sub) → Toast",
-        "category":  "design-pattern",
-        "path":  "design-pattern/observer-EXERCISE.md"
-    },
-    {
-        "title":  "Observer / Pub-Sub",
-        "category":  "design-pattern",
-        "path":  "design-pattern/observer-NOTES.md"
-    },
-    {
-        "title":  "워크북 — Singleton",
-        "category":  "design-pattern",
-        "path":  "design-pattern/singleton-EXERCISE.md"
-    },
-    {
-        "title":  "Singleton",
-        "category":  "design-pattern",
-        "path":  "design-pattern/singleton-NOTES.md"
     },
     {
         "title":  "자바 기본 개념 정리",
