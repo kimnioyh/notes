@@ -45,6 +45,15 @@ Service 메서드가 끝나면 창고 문 닫힘. 그 뒤 Controller가 `event.g
 - `@OneToMany` → 기본 LAZY (안전)
 - `@ManyToOne`, `@OneToOne` → 기본 **EAGER** (위험) → 항상 `fetch = FetchType.LAZY` 명시
 
+### 6-1. ⚠️ 더 깊은 함정: @OneToOne은 LAZY를 명시해도 안 먹는다
+`@ManyToOne`은 `fetch = LAZY`를 주면 진짜 프록시로 지연 로딩된다.
+하지만 **`@OneToOne`은 `fetch = LAZY`를 줘도, `optional = false`인 주인 쪽이어도, `bytecode enhancement` 없이는 즉시(EAGER) 로딩된다.**
+
+왜? Hibernate가 이 연관관계 필드에 `null`을 넣을지 프록시를 넣을지 결정하려면 상대 row 존재 여부를 알아야 하는데, @OneToOne은 그걸 판단하려고 결국 조회를 해버린다. (@ManyToOne은 FK 값만 보면 되니 프록시가 쉽다.)
+
+Pulse에서 실제로 테스트로 확인함 — Report.event(@OneToOne LAZY)를 detach 후 접근했더니 **예외 없이 읽힘 = 이미 즉시 로딩됨**.
+진짜 LAZY로 만들려면 `build.gradle`에 Hibernate bytecode enhancement 플러그인 설정이 필요하다.
+
 ### 7. 해결책 (원리 먼저, 적용은 나중)
 - **Fetch Join** — 쿼리에서 "이번엔 자식까지 같이" 콕 집기
 - **@EntityGraph** — 어노테이션으로 같은 효과

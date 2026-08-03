@@ -36,10 +36,13 @@
     border:1px solid var(--line); background:transparent; color:var(--fg);
     border-radius:6px; padding:4px 8px; cursor:pointer; font-size:14px;
   }
-  .cat{padding:14px 16px 4px; font-size:12px; font-weight:700;
-    text-transform:uppercase; letter-spacing:.06em; color:var(--muted)}
+  .cat{display:inline-block; margin:16px 12px 6px; padding:4px 11px;
+    font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.05em;
+    color:#fff; background:var(--accent); border-radius:999px;
+    box-shadow:0 1px 2px rgba(0,0,0,.15)}
   .item{display:block; padding:7px 16px; color:var(--fg); text-decoration:none;
     font-size:14.5px; border-left:3px solid transparent; cursor:pointer}
+  .item .date{color:var(--muted); font-size:12px; font-variant-numeric:tabular-nums}
   .item:hover{background:rgba(127,127,127,.08)}
   .item.active{background:var(--sel); border-left-color:var(--accent); font-weight:600}
   /* 본문 */
@@ -110,14 +113,26 @@
   }catch(e){
     content.innerHTML='<div id="placeholder">manifest.json을 불러오지 못했습니다.</div>'; return;
   }
+  // 카테고리명 → 고정 색상(hue). 같은 이름은 항상 같은 색.
+  function catHue(s){ let h=0; for(const c of s) h=(h*31+c.charCodeAt(0))>>>0; return h%360; }
+  // "YYYY-MM-DD" → "(M/D)" 접두어
+  function shortDate(d){ if(!d) return ''; const p=String(d).split('-'); return p.length===3 ? `(${+p[1]}/${+p[2]})` : ''; }
+
   const byCat={};
   notes.forEach(n=>{ (byCat[n.category]=byCat[n.category]||[]).push(n); });
   for(const cat of Object.keys(byCat)){
-    const h=document.createElement('div'); h.className='cat'; h.textContent=cat; list.appendChild(h);
+    const h=document.createElement('div'); h.className='cat'; h.textContent=cat;
+    h.style.background='hsl('+catHue(cat)+' 52% 45%)';
+    list.appendChild(h);
     byCat[cat].forEach(n=>{
       const a=document.createElement('a');
-      a.className='item'; a.textContent=n.title; a.href='#'+encodeURIComponent(n.path);
-      a.dataset.path=n.path; list.appendChild(a);
+      a.className='item'; a.href='#'+encodeURIComponent(n.path); a.dataset.path=n.path;
+      const d=shortDate(n.date);
+      if(d){
+        const s=document.createElement('span'); s.className='date'; s.textContent=d;
+        a.appendChild(s); a.appendChild(document.createTextNode(' '+n.title));
+      } else { a.textContent=n.title; }
+      list.appendChild(a);
     });
   }
 
