@@ -1,5 +1,10 @@
 [
     {
+        "title":  "Understanding is the new bottleneck (Geoffrey Litt, Notion)",
+        "category":  "ai-workflow",
+        "path":  "ai-workflow/understanding-bottleneck.md"
+    },
+    {
         "title":  "Claude Code — 훅(hook) vs 스킬(skill)",
         "category":  "claude-code",
         "path":  "claude-code/hooks-vs-skills.md"
