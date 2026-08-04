@@ -114,6 +114,30 @@
         "date":  "2026-07-29"
     },
     {
+        "title":  "스프링 컨테이너와 빈 — 어떻게 만들어지나",
+        "category":  "java",
+        "path":  "java/spring-02-container-and-bean.md",
+        "date":  "2026-08-04"
+    },
+    {
+        "title":  "싱글톤 컨테이너와 @Configuration",
+        "category":  "java",
+        "path":  "java/spring-03-singleton-container.md",
+        "date":  "2026-08-04"
+    },
+    {
+        "title":  "컴포넌트 스캔 (@ComponentScan)",
+        "category":  "java",
+        "path":  "java/spring-04-component-scan.md",
+        "date":  "2026-08-04"
+    },
+    {
+        "title":  "의존관계 자동 주입 (@Autowired)",
+        "category":  "java",
+        "path":  "java/spring-05-di-autowired.md",
+        "date":  "2026-08-04"
+    },
+    {
         "title":  "스프링 테스트 생성자 주입 \u0026 @TestConstructor",
         "category":  "java",
         "path":  "java/spring-test-constructor-injection.md",
