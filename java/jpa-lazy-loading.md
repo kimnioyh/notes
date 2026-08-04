@@ -45,14 +45,23 @@ Service 메서드가 끝나면 창고 문 닫힘. 그 뒤 Controller가 `event.g
 - `@OneToMany` → 기본 LAZY (안전)
 - `@ManyToOne`, `@OneToOne` → 기본 **EAGER** (위험) → 항상 `fetch = FetchType.LAZY` 명시
 
-### 6-1. ⚠️ 더 깊은 함정: @OneToOne은 LAZY를 명시해도 안 먹는다
-`@ManyToOne`은 `fetch = LAZY`를 주면 진짜 프록시로 지연 로딩된다.
-하지만 **`@OneToOne`은 `fetch = LAZY`를 줘도, `optional = false`인 주인 쪽이어도, `bytecode enhancement` 없이는 즉시(EAGER) 로딩된다.**
+### 6-1. ⚠️ 더 깊은 함정: @OneToOne LAZY는 "주인 쪽이냐"에 따라 갈린다
+`@OneToOne`의 LAZY는 어느 쪽에 붙었느냐로 동작이 갈린다.
 
-왜? Hibernate가 이 연관관계 필드에 `null`을 넣을지 프록시를 넣을지 결정하려면 상대 row 존재 여부를 알아야 하는데, @OneToOne은 그걸 판단하려고 결국 조회를 해버린다. (@ManyToOne은 FK 값만 보면 되니 프록시가 쉽다.)
+- **주인 쪽(FK 컬럼 보유) @OneToOne → LAZY 잘 먹는다.** `@ManyToOne`과 똑같이 자기 FK 값만 보면 되니 프록시를 만들 수 있다.
+- **역방향(mappedBy) @OneToOne → `bytecode enhancement` 없이는 LAZY가 안 먹고 즉시 로딩된다.** Hibernate가 이 필드에 `null`을 넣을지 프록시를 넣을지 정하려면 상대 row 존재 여부를 알아야 하는데, 그걸 판단하려고 결국 조회를 해버리기 때문.
 
-Pulse에서 실제로 테스트로 확인함 — Report.event(@OneToOne LAZY)를 detach 후 접근했더니 **예외 없이 읽힘 = 이미 즉시 로딩됨**.
-진짜 LAZY로 만들려면 `build.gradle`에 Hibernate bytecode enhancement 플러그인 설정이 필요하다.
+Pulse의 `Report.event`는 `@JoinColumn(name="event_id")`로 FK를 가진 **주인 쪽**이라, 테스트로 확인하니 **진짜 LAZY 프록시로 로딩**됐다(`isLoaded=false`, 클래스가 `Event$HibernateProxy`).
+
+> 🩹 처음엔 "detach 후 접근해도 예외가 안 난다 → 즉시 로딩됐다"고 잘못 판단했었다. 하지만 **detach는 즉시 로딩의 증거가 아니다** — 세션(트랜잭션)이 아직 열려 있으면 `detach(엔티티)`가 프록시를 확실히 끊지 못해, 접근하는 순간 그냥 초기화돼버린다. 그래서 LAZY 여부는 detach가 아니라 `PersistenceUnitUtil.isLoaded(entity, "필드명")`로 **직접** 확인해야 한다.
+
+```java
+PersistenceUnitUtil pu = em.getEntityManagerFactory().getPersistenceUnitUtil();
+Report found = em.find(Report.class, id);   // 캐시 clear 후 다시 조회
+assertThat(pu.isLoaded(found, "event")).isFalse();      // 아직 프록시 = LAZY 동작
+found.getEvent().getTitle();                             // 여기서 초기화
+assertThat(pu.isLoaded(found, "event")).isTrue();
+```
 
 ### 7. 해결책 (원리 먼저, 적용은 나중)
 - **Fetch Join** — 쿼리에서 "이번엔 자식까지 같이" 콕 집기
