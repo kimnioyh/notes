@@ -144,6 +144,12 @@
         "date":  "2026-08-04"
     },
     {
+        "title":  "Spring Security JWT 필터체인과 403 에러 디스패치 함정",
+        "category":  "java",
+        "path":  "java/spring-security-jwt-filter-chain.md",
+        "date":  "2026-08-04"
+    },
+    {
         "title":  "스프링 테스트 생성자 주입 \u0026 @TestConstructor",
         "category":  "java",
         "path":  "java/spring-test-constructor-injection.md",
