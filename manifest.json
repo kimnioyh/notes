@@ -96,6 +96,12 @@
         "date":  "2026-07-29"
     },
     {
+        "title":  "자바 기본형 vs 래퍼 클래스 (long vs Long)",
+        "category":  "java",
+        "path":  "java/java-primitive-vs-wrapper.md",
+        "date":  "2026-08-04"
+    },
+    {
         "title":  "JPA 연관관계 매핑 (주인 · 양방향/단방향)",
         "category":  "java",
         "path":  "java/jpa-association-mapping.md",
