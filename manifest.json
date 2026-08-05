@@ -24,6 +24,12 @@
         "date":  "2026-07-28"
     },
     {
+        "title":  "Graceful degradation(우아한 저하)과 센티넬 값",
+        "category":  "design-pattern",
+        "path":  "design-pattern/graceful-degradation-and-sentinel.md",
+        "date":  "2026-08-05"
+    },
+    {
         "title":  "워크북 — Observer (pub-sub) → Toast",
         "category":  "design-pattern",
         "path":  "design-pattern/observer-EXERCISE.md",
@@ -78,6 +84,12 @@
         "date":  "2026-07-28"
     },
     {
+        "title":  "페이지네이션: 커서 vs offset, 그리고 봉투 seam",
+        "category":  "docs",
+        "path":  "docs/pagination-cursor-vs-offset.md",
+        "date":  "2026-08-05"
+    },
+    {
         "title":  "🧩 D2 워크북 — 결제 라이브러리 코어",
         "category":  "docs",
         "path":  "docs/WORKBOOK-D2.md",
@@ -90,10 +102,28 @@
         "date":  "2026-07-28"
     },
     {
+        "title":  "CORS (교차 출처 요청) — preflight·허용목록·와일드카드 위험",
+        "category":  "java",
+        "path":  "java/cors-explained.md",
+        "date":  "2026-08-05"
+    },
+    {
         "title":  "자바 기본 개념 정리",
         "category":  "java",
         "path":  "java/java-01-basics.md",
         "date":  "2026-07-29"
+    },
+    {
+        "title":  "Java 접근제어자 (public / protected / (없음) / private)",
+        "category":  "java",
+        "path":  "java/java-access-modifiers.md",
+        "date":  "2026-08-05"
+    },
+    {
+        "title":  "Java enum에 필드·생성자 달기",
+        "category":  "java",
+        "path":  "java/java-enum-with-fields.md",
+        "date":  "2026-08-05"
     },
     {
         "title":  "자바 기본형 vs 래퍼 클래스 (long vs Long)",
@@ -112,6 +142,12 @@
         "category":  "java",
         "path":  "java/jpa-lazy-loading.md",
         "date":  "2026-08-03"
+    },
+    {
+        "title":  "정규식 전방탐색(lookahead)과 수량자가 뭐에 붙나",
+        "category":  "java",
+        "path":  "java/regex-lookahead-and-quantifiers.md",
+        "date":  "2026-08-05"
     },
     {
         "title":  "스프링 핵심 개념 + 요청 플로우",
@@ -142,6 +178,12 @@
         "category":  "java",
         "path":  "java/spring-05-di-autowired.md",
         "date":  "2026-08-04"
+    },
+    {
+        "title":  "Spring 전역 예외 처리 (@RestControllerAdvice)",
+        "category":  "java",
+        "path":  "java/spring-global-exception-handling.md",
+        "date":  "2026-08-05"
     },
     {
         "title":  "Spring Security JWT 필터체인과 403 에러 디스패치 함정",
