@@ -198,6 +198,12 @@
         "date":  "2026-08-03"
     },
     {
+        "title":  "Edge 헤드리스로 HTML→PDF 변환",
+        "category":  "powershell",
+        "path":  "powershell/edge-headless-pdf.md",
+        "date":  "2026-08-06"
+    },
+    {
         "title":  "PowerShell 5.1의 인코딩·BOM 함정",
         "category":  "powershell",
         "path":  "powershell/encoding-bom.md",
