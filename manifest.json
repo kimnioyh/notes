@@ -102,6 +102,12 @@
         "date":  "2026-07-28"
     },
     {
+        "title":  "check-then-insert 레이스 컨디션과 유니크 제약 재시도",
+        "category":  "java",
+        "path":  "java/check-then-insert-race-and-retry.md",
+        "date":  "2026-08-07"
+    },
+    {
         "title":  "CORS (교차 출처 요청) — preflight·허용목록·와일드카드 위험",
         "category":  "java",
         "path":  "java/cors-explained.md",
