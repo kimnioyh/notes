@@ -108,6 +108,12 @@
         "date":  "2026-08-05"
     },
     {
+        "title":  "@DataJpaTest의 트랜잭션과 영속성 컨텍스트 (em·repository·수동 service가 한 tx를 공유하는 이유)",
+        "category":  "java",
+        "path":  "java/datajpatest-transaction-and-persistence-context.md",
+        "date":  "2026-08-07"
+    },
+    {
         "title":  "자바 기본 개념 정리",
         "category":  "java",
         "path":  "java/java-01-basics.md",
