@@ -68,6 +68,42 @@ assertThat(pu.isLoaded(found, "event")).isTrue();
 - **@EntityGraph** — 어노테이션으로 같은 효과
 - **DTO 변환** — 창고 열려있을 때 필요한 값만 뽑아 담아 나가기(실무 최선호)
 
+### 8. 반대 상황: 주인만 저장하면 역방향 LAZY 컬렉션이 "안 보인다" → flush/clear로 새로 읽기
+LAZY는 예외(통로 끊김)만 문제가 아니다. **메모리와 DB가 어긋나서 "있는데 안 보이는"** 함정도 있다. 테스트에서 세션 있는 이벤트를 만들려다 만났다.
+
+양방향 `Event(1) ↔ Session(N)`에서 **FK를 가진 주인은 `Session.event`**, 역방향은 `Event.sessions`(mappedBy, LAZY)다.
+
+```java
+Event event = eventRepository.findByCode(code).orElseThrow(); // sessions = 미초기화 프록시
+em.persist(new Session(event, "세션1", 1));  // 주인(Session)만 저장 — FK만 세팅
+```
+
+여기서 두 함정이 겹친다:
+1. **주인만 저장하면 역방향 컬렉션은 메모리에서 자동 갱신 안 됨.** Hibernate는 `Session.event`의 FK만 보고 저장할 뿐, `event.sessions` 리스트에 이 세션을 대신 넣어주지 않는다. (그래서 엔티티에 두 쪽을 함께 세팅하는 `addSession()` 편의 메서드를 둔다.)
+2. **LAZY라 `event.sessions`는 건드릴 때 읽는데**, 이미 초기화된 컬렉션이면 다시 조회 안 해서 stale할 수 있다.
+
+→ 그래서 이 `event`의 `getSessions()`를 믿을 수 없다. 해결은 **메모리를 버리고 DB에서 새로 읽게** 만드는 것:
+
+```java
+em.flush();  // ① 대기 중이던 Session INSERT를 DB에 실제 반영
+em.clear();  // ② 영속성 컨텍스트를 비움 → 세션 모르는 event 객체를 버림
+
+// 이후 서비스가 findByCode로 event를 "새로" 로드하면,
+// sessions는 깨끗한 미초기화 LAZY → getSessions() 순간 DB 조회 → 세션 1건을 제대로 봄
+eventService.update(owner.getId(), code, new EventUpdateRequest(null, null, EventStatus.LIVE));
+```
+
+**타임라인**
+```
+persist(session) → 메모리: event.sessions엔 반영 X  | DB: 아직 대기
+flush()          → DB: session INSERT 완료
+clear()          → 메모리: event 버림(detached)
+findByCode(재로드)→ DB에서 새 event(sessions=미초기화 LAZY)
+getSessions()    → SELECT 나가서 세션 1건 확인 ✅
+```
+
+> 핵심 대비: **7번은 "통로가 닫혀 못 읽는"(예외) 문제**, **8번은 "통로는 있는데 메모리가 낡아 안 보이는"(오탐) 문제.** 둘 다 뿌리는 "LAZY 컬렉션은 영속성 컨텍스트 상태에 좌우된다"는 것.
+
 ## 예시 코드
 Pulse 프로젝트에서 예외를 **일부러 재현**한 테스트:
 
@@ -97,12 +133,15 @@ class EventPersistenceTest {
 ## 확인 문제
 1. `LazyInitializationException`은 정확히 어떤 두 조건이 겹칠 때 터지나?
 2. `@ManyToOne`을 그냥 두면 왜 위험한가?
+3. 테스트에서 `em.persist(new Session(event, ...))`로 세션을 저장했는데, 곧바로 `event.getSessions()`를 믿으면 안 되는 이유는? `flush()`+`clear()`가 이걸 어떻게 해결하나?
 
 <details><summary>답</summary>
 
 1. **(a) LAZY 프록시가 아직 초기화되지 않았고, (b) 영속성 컨텍스트(세션)가 이미 닫혀서 DB로 갈 통로가 없을 때.** 둘 중 하나만이면 안 터진다 — 트랜잭션 안에서 접근하면(통로 살아있음) 초기화되고, 이미 초기화된 값이면(창고 닫혀도) 그냥 읽힌다.
 
 2. `@ManyToOne` 기본이 **EAGER**라, 부모를 꺼낼 때마다 연관 부모가 줄줄이 즉시 로딩된다(Feedback→Session→Event→owner…). 필요 없는 조인/쿼리가 계속 나가 성능이 망가진다. 그래서 연관관계는 `fetch = FetchType.LAZY`로 깔고 시작한다.
+
+3. **주인(`Session`)만 저장했기 때문.** Hibernate는 `Session.event`의 FK만 보고 저장할 뿐, 역방향 `event.sessions` 컬렉션을 메모리에서 대신 채워주지 않는다. 게다가 그 컬렉션은 LAZY라 상태가 미덥지 않다. → `flush()`로 세션을 **DB에 실제 반영**하고, `clear()`로 **세션 모르는 메모리 객체를 버려서**, 이후 `findByCode`가 DB에서 event를 새로 로드하게 만든다. 새 객체의 `sessions`는 깨끗한 미초기화 LAZY라, 접근 순간 DB를 조회해 저장된 세션을 제대로 본다.
 
 </details>
 
