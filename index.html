@@ -120,7 +120,10 @@
 
   const byCat={};
   notes.forEach(n=>{ (byCat[n.category]=byCat[n.category]||[]).push(n); });
-  for(const cat of Object.keys(byCat)){
+  // 날짜 내림차순(ISO라 문자열 비교로 정렬): 카테고리 안 노트도, 카테고리 자체도 최신 먼저
+  for(const c in byCat){ byCat[c].sort((a,b)=>(b.date||'').localeCompare(a.date||'')); }
+  const cats=Object.keys(byCat).sort((a,b)=>(byCat[b][0].date||'').localeCompare(byCat[a][0].date||''));
+  for(const cat of cats){
     const h=document.createElement('div'); h.className='cat'; h.textContent=cat;
     h.style.background='hsl('+catHue(cat)+' 52% 45%)';
     list.appendChild(h);

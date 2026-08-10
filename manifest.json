@@ -198,6 +198,18 @@
         "date":  "2026-08-05"
     },
     {
+        "title":  "Spring MVC 컨트롤러 파라미터 바인딩 (@PathVariable · @AuthenticationPrincipal · @RequestBody)",
+        "category":  "java",
+        "path":  "java/spring-mvc-param-binding.md",
+        "date":  "2026-08-10"
+    },
+    {
+        "title":  "Spring Security 6 — 쿠키 인증 + CSRF double-submit 설정",
+        "category":  "java",
+        "path":  "java/spring-security-cookie-csrf.md",
+        "date":  "2026-08-10"
+    },
+    {
         "title":  "Spring Security JWT 필터체인과 403 에러 디스패치 함정",
         "category":  "java",
         "path":  "java/spring-security-jwt-filter-chain.md",
@@ -220,5 +232,17 @@
         "category":  "powershell",
         "path":  "powershell/encoding-bom.md",
         "date":  "2026-08-03"
+    },
+    {
+        "title":  "쿠키 기반 JWT 인증 (HttpOnly · SameSite · 크로스도메인 CSRF)",
+        "category":  "web",
+        "path":  "web/cookie-based-auth.md",
+        "date":  "2026-08-10"
+    },
+    {
+        "title":  "Next.js fetch vs Node.js fetch (같은 표준, 다른 동작)",
+        "category":  "web",
+        "path":  "web/nextjs-vs-node-fetch.md",
+        "date":  "2026-08-10"
     }
 ]
