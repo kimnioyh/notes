@@ -76,15 +76,43 @@ public class Session {
 }
 ```
 
+## @ElementCollection — 값 컬렉션을 별도 테이블에 (엔티티 아닌 것들)
+`List<String> keywords`처럼 **엔티티가 아닌 값(문자열·enum 등)의 컬렉션**은 `@ManyToOne`/`@OneToMany`가 아니라 `@ElementCollection`으로 매핑한다. 별도 엔티티/PK가 없고, **원소마다 한 행인 딸린 테이블**에 저장된다.
+
+```java
+@ElementCollection
+private List<String> keywords;   // 기본 테이블명 feedback_keywords
+```
+```
+feedbacks               feedback_keywords
+┌────┐                  ┌─────────────┬──────────┐
+│ id │                  │ feedback_id │ keywords │  ← 키워드 하나당 한 행
+├────┤                  ├─────────────┼──────────┤
+│ 1  │                  │ 1           │ 발표속도 │
+└────┘                  │ 1           │ 내용     │
+```
+
+- **기본 LAZY** — 실제로 건드릴 때 로딩(트랜잭션 밖이면 [[jpa-lazy-loading]] 예외, 목록이면 [[jpa-n-plus-one-and-osiv]]).
+- **JPQL 조인으로 펼쳐 집계** — 컬렉션이 딴 테이블이라, "값별 개수"를 세려면 조인해 각 원소를 꺼낸다:
+  ```jpql
+  select new KeywordCount(k, count(k))
+  from Feedback f join f.keywords k   -- 컬렉션을 원소 k로 펼침((f, k) 짝으로 행 뻥튀기)
+  group by k order by count(k) desc   -- 다시 묶어서 센다
+  ```
+- **언제 쓰나**: 별도 키워드 테이블/엔티티까지 둘 필요 없는 단순 값 목록. 정규화 오버엔지니어링을 피하는 선택. 다른 엔티티가 그 값을 참조·조회해야 하면 그때 정식 엔티티로 승격.
+
 ## 확인 문제
 1. `@OneToMany(mappedBy = "event")`에서 `"event"`는 무엇을 가리키나?
 2. 연관관계 주인은 어느 쪽이고, 왜 그 개념이 필요한가?
+3. `List<String> keywords`를 `@ElementCollection`으로 두면 DB에 어떻게 저장되고, "키워드별 빈도"는 JPQL로 어떻게 세나?
 
 <details><summary>답</summary>
 
 1. **반대편(자식) 엔티티의 필드 이름.** 여기선 `Session.event` 필드를 가리킨다. "FK 관리는 저 필드가 하고, 나(부모 컬렉션)는 읽기용 역방향일 뿐"이라는 선언. 문자열이라 오타 시 런타임에 터진다.
 
 2. **FK 컬럼을 실제로 들고 있는 쪽(보통 `@ManyToOne`이 붙은 자식).** DB에는 관계를 나타내는 FK가 한 개뿐인데, 양쪽 객체가 서로를 참조하면 "둘 중 누구 값으로 FK를 INSERT/UPDATE할지" 정해야 한다. 그 기준이 주인. 주인이 아닌 쪽(`mappedBy`)의 값 변경은 DB에 반영되지 않는다.
+
+3. 엔티티가 아닌 값 컬렉션이라 별도 딸린 테이블(`feedback_keywords`)에 **원소마다 한 행**(`feedback_id`, `keywords`)으로 저장된다. 빈도는 `from Feedback f join f.keywords k`로 컬렉션을 원소 `k`로 펼친 뒤(한 소감이 키워드 N개면 N행으로 뻥튀기) `group by k`로 다시 묶어 `count(k)`로 센다.
 
 </details>
 

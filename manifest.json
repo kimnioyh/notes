@@ -168,6 +168,18 @@
         "date":  "2026-08-03"
     },
     {
+        "title":  "N+1 쿼리와 OSIV (Open Session In View)",
+        "category":  "java",
+        "path":  "java/jpa-n-plus-one-and-osiv.md",
+        "date":  "2026-08-12"
+    },
+    {
+        "title":  "JPQL @Query 작성 기초 (Spring Data JPA)",
+        "category":  "java",
+        "path":  "java/jpql-query-basics.md",
+        "date":  "2026-08-12"
+    },
+    {
         "title":  "정규식 전방탐색(lookahead)과 수량자가 뭐에 붙나",
         "category":  "java",
         "path":  "java/regex-lookahead-and-quantifiers.md",
