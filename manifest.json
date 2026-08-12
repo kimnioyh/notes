@@ -12,6 +12,12 @@
         "date":  "2026-08-03"
     },
     {
+        "title":  "클라이언트 검증(UX) vs 서버 검증(보안)",
+        "category":  "design-pattern",
+        "path":  "design-pattern/client-vs-server-enforcement.md",
+        "date":  "2026-08-12"
+    },
+    {
         "title":  "Design 01 — Observer (Pub-Sub)",
         "category":  "design-pattern",
         "path":  "design-pattern/design-01-observer.md",
@@ -40,6 +46,12 @@
         "category":  "design-pattern",
         "path":  "design-pattern/observer-NOTES.md",
         "date":  "2026-07-28"
+    },
+    {
+        "title":  "레이트리밋 — 인메모리 슬라이딩 윈도우",
+        "category":  "design-pattern",
+        "path":  "design-pattern/rate-limiting-sliding-window.md",
+        "date":  "2026-08-12"
     },
     {
         "title":  "워크북 — Singleton",
@@ -220,6 +232,12 @@
         "category":  "java",
         "path":  "java/spring-test-constructor-injection.md",
         "date":  "2026-08-03"
+    },
+    {
+        "title":  "Spring @Transactional — self-invocation과 private 함정",
+        "category":  "java",
+        "path":  "java/spring-transactional-self-invocation.md",
+        "date":  "2026-08-12"
     },
     {
         "title":  "Edge 헤드리스로 HTML→PDF 변환",

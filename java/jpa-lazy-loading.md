@@ -104,6 +104,20 @@ getSessions()    → SELECT 나가서 세션 1건 확인 ✅
 
 > 핵심 대비: **7번은 "통로가 닫혀 못 읽는"(예외) 문제**, **8번은 "통로는 있는데 메모리가 낡아 안 보이는"(오탐) 문제.** 둘 다 뿌리는 "LAZY 컬렉션은 영속성 컨텍스트 상태에 좌우된다"는 것.
 
+### 9. 프록시 동일성: `equals` 대신 ID로 비교
+LAZY 연관을 꺼내면 실제 객체가 아니라 **프록시**(`Event$HibernateProxy`)를 준다. 그래서 "같은 엔티티인지" 비교할 때 `==`나 기본 `equals`(오버라이드 안 했으면 참조 비교)는 **프록시 vs 실제 객체라 false**가 나서 정상 케이스도 틀린다.
+
+Pulse 예 — 소감 제출 게이트에서 "세션이 그 이벤트 소속인지" 확인:
+```java
+Event event = eventRepository.findByCode(eventCode).orElseThrow(...);  // 실제 객체
+Session session = sessionRepository.findById(sessionId).orElseThrow(...);
+// session.getEvent()는 LAZY 프록시 → event(실제)와 다른 인스턴스라 == false 위험
+if (!session.getEvent().equals(event)) throw ...;                  // ❌ 정상도 튕김
+if (!session.getEvent().getId().equals(event.getId())) throw ...;  // ✅ ID 비교
+```
+- `getId()`는 프록시가 **FK로 이미 들고 있어 추가 쿼리 없이** 반환된다(프록시를 초기화하지 않음).
+- 근본 해결은 엔티티에 **ID 기반 `equals`/`hashCode` 오버라이드**. 안 했으면 `Object` 기본(참조 비교)이라 프록시에서 깨진다.
+
 ## 예시 코드
 Pulse 프로젝트에서 예외를 **일부러 재현**한 테스트:
 
@@ -134,6 +148,7 @@ class EventPersistenceTest {
 1. `LazyInitializationException`은 정확히 어떤 두 조건이 겹칠 때 터지나?
 2. `@ManyToOne`을 그냥 두면 왜 위험한가?
 3. 테스트에서 `em.persist(new Session(event, ...))`로 세션을 저장했는데, 곧바로 `event.getSessions()`를 믿으면 안 되는 이유는? `flush()`+`clear()`가 이걸 어떻게 해결하나?
+4. `session.getEvent().equals(event)`가 정상 케이스에서도 false가 날 수 있는 이유는? 어떻게 비교해야 하나?
 
 <details><summary>답</summary>
 
@@ -143,8 +158,11 @@ class EventPersistenceTest {
 
 3. **주인(`Session`)만 저장했기 때문.** Hibernate는 `Session.event`의 FK만 보고 저장할 뿐, 역방향 `event.sessions` 컬렉션을 메모리에서 대신 채워주지 않는다. 게다가 그 컬렉션은 LAZY라 상태가 미덥지 않다. → `flush()`로 세션을 **DB에 실제 반영**하고, `clear()`로 **세션 모르는 메모리 객체를 버려서**, 이후 `findByCode`가 DB에서 event를 새로 로드하게 만든다. 새 객체의 `sessions`는 깨끗한 미초기화 LAZY라, 접근 순간 DB를 조회해 저장된 세션을 제대로 본다.
 
+4. `session.getEvent()`는 LAZY라 실제 객체가 아니라 Hibernate 프록시를 반환하고, `event`는 `findByCode`로 로드한 실제 객체다. `Event`에 `equals` 오버라이드가 없으면 `Object` 기본 참조 비교라 프록시 ≠ 실제 → false가 나 정상 케이스도 튕긴다. `getId()`로 PK를 비교하거나(프록시도 FK를 들고 있어 쿼리 없이 반환), 엔티티에 ID 기반 `equals`/`hashCode`를 오버라이드해야 한다.
+
 </details>
 
 ## 더 볼 것
 - [[jpa-association-mapping]] — 연관관계 매핑(주인, 양방향/단방향)
+- [[spring-transactional-self-invocation]] — LAZY 접근이 되려면 트랜잭션이 열려 있어야 하는 배경
 - N+1 문제, Fetch Join, @EntityGraph, OSIV(Open Session In View)
