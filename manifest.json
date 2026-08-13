@@ -144,6 +144,12 @@
         "date":  "2026-08-07"
     },
     {
+        "title":  "ddl-auto=update의 한계와 배포 스키마 드리프트",
+        "category":  "java",
+        "path":  "java/ddl-auto-schema-drift.md",
+        "date":  "2026-08-13"
+    },
+    {
         "title":  "Hibernate JSON 컬럼 매핑 (@JdbcTypeCode(SqlTypes.JSON))",
         "category":  "java",
         "path":  "java/hibernate-json-column.md",
@@ -304,5 +310,11 @@
         "category":  "web",
         "path":  "web/nextjs-vs-node-fetch.md",
         "date":  "2026-08-10"
+    },
+    {
+        "title":  "프록시로 same-origin 만들기 (CORS·CSRF 동시 해결)",
+        "category":  "web",
+        "path":  "web/proxy-same-origin-cors-csrf.md",
+        "date":  "2026-08-13"
     }
 ]
