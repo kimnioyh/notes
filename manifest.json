@@ -12,12 +12,6 @@
         "date":  "2026-08-03"
     },
     {
-        "title":  "check-then-insert 레이스와 saveAndFlush로 UNIQUE 위반 잡기",
-        "category":  "design-pattern",
-        "path":  "design-pattern/check-then-insert-race-saveandflush.md",
-        "date":  "2026-08-14"
-    },
-    {
         "title":  "클라이언트 검증(UX) vs 서버 검증(보안)",
         "category":  "design-pattern",
         "path":  "design-pattern/client-vs-server-enforcement.md",
@@ -129,13 +123,13 @@
         "title":  "check-then-insert 레이스 컨디션과 유니크 제약 재시도",
         "category":  "java",
         "path":  "java/check-then-insert-race-and-retry.md",
-        "date":  "2026-08-07"
+        "date":  "2026-08-14"
     },
     {
         "title":  "CORS (교차 출처 요청) — preflight·허용목록·와일드카드 위험",
         "category":  "java",
         "path":  "java/cors-explained.md",
-        "date":  "2026-08-05"
+        "date":  "2026-08-14"
     },
     {
         "title":  "@CreationTimestamp의 함정 (완료 시각엔 부적합)",
@@ -153,12 +147,6 @@
         "title":  "ddl-auto=update의 한계와 배포 스키마 드리프트",
         "category":  "java",
         "path":  "java/ddl-auto-schema-drift.md",
-        "date":  "2026-08-13"
-    },
-    {
-        "title":  "ddl-auto=update와 enum CHECK 제약 드리프트",
-        "category":  "java",
-        "path":  "java/hibernate-ddl-update-enum-check-drift.md",
         "date":  "2026-08-14"
     },
     {
@@ -195,13 +183,13 @@
         "title":  "JPA 연관관계 매핑 (주인 · 양방향/단방향)",
         "category":  "java",
         "path":  "java/jpa-association-mapping.md",
-        "date":  "2026-08-03"
+        "date":  "2026-08-12"
     },
     {
         "title":  "JPA Lazy Loading \u0026 LazyInitializationException",
         "category":  "java",
         "path":  "java/jpa-lazy-loading.md",
-        "date":  "2026-08-03"
+        "date":  "2026-08-12"
     },
     {
         "title":  "N+1 쿼리와 OSIV (Open Session In View)",
@@ -276,16 +264,10 @@
         "date":  "2026-08-10"
     },
     {
-        "title":  "Spring Security 필터 순서와 커스텀 필터 등록",
-        "category":  "java",
-        "path":  "java/spring-security-filter-order.md",
-        "date":  "2026-08-14"
-    },
-    {
         "title":  "Spring Security JWT 필터체인과 403 에러 디스패치 함정",
         "category":  "java",
         "path":  "java/spring-security-jwt-filter-chain.md",
-        "date":  "2026-08-04"
+        "date":  "2026-08-14"
     },
     {
         "title":  "스프링 테스트 생성자 주입 \u0026 @TestConstructor",
@@ -321,18 +303,6 @@
         "title":  "쿠키 기반 JWT 인증 (HttpOnly · SameSite · 크로스도메인 CSRF)",
         "category":  "web",
         "path":  "web/cookie-based-auth.md",
-        "date":  "2026-08-10"
-    },
-    {
-        "title":  "CORS 프리플라이트 (preflight)",
-        "category":  "web",
-        "path":  "web/cors-preflight.md",
-        "date":  "2026-08-14"
-    },
-    {
-        "title":  "HttpOnly 쿠키 JWT와 /auth/me 세션 복원",
-        "category":  "web",
-        "path":  "web/httponly-cookie-jwt-session-restore.md",
         "date":  "2026-08-14"
     },
     {

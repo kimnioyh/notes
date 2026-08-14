@@ -77,3 +77,13 @@ public EventResponse create(Long ownerId, EventCreateRequest req) {
 ## 더 볼 것
 - [[datajpatest-transaction-and-persistence-context]] — 트랜잭션 경계·rollback-only가 왜 재시도를 막는지
 - 낙관적 락(@Version) — "같은 행을 동시에 수정"하는 다른 종류의 동시성 문제
+
+## 변형: 재시도 대신 409로 매핑 (UNIQUE가 고정 식별자일 때)
+
+event `code`는 충돌 시 **새 값으로 재시도**할 수 있다. 하지만 리포트처럼 UNIQUE가 **고정 식별자**(`report.event_id`)면 새로 고를 값이 없다 → 재시도 대신 "이미 존재"로 보고 도메인 에러(409)로 매핑한다.
+
+- 동시 `generate` 두 개가 둘 다 "리포트 없음"을 읽고 둘 다 INSERT → `event_id` UNIQUE 위반.
+- `save` → `saveAndFlush`로 INSERT를 그 자리에서 터뜨려 `DataIntegrityViolationException`을 잡고 `REPORT_ALREADY_EXISTS`(409)로 변환(500 방지).
+- 순차 더블클릭은 사전 상태검사(`findBy… → 있으면 409`)로 이미 걸러짐 — catch는 진짜 동시 레이스 전용.
+
+즉 같은 check-then-insert 레이스라도 **값을 새로 고를 수 있으면 재시도, 식별자로 고정이면 409**로 대응이 갈린다.

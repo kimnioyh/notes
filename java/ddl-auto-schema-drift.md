@@ -58,3 +58,16 @@ Pulse Report: `sentiment_breakdown`을 text→jsonb, `topKeywords`를 `@ElementC
 ## 더 볼 것
 - [[hibernate-json-column]] — text→jsonb로 바꾼 그 매핑
 - [[datajpatest-transaction-and-persistence-context]] — 로컬 슬라이스 테스트가 배포 스키마를 대변하지 못하는 배경
+
+## 사례: enum CHECK 제약 드리프트 (2026-08-14)
+
+`@Enumerated(EnumType.STRING)` 컬럼은 Hibernate가 `<table>_<column>_check` CHECK 제약(`status IN (…enum값…)`)을 만든다. enum에 값을 추가해도 `update`는 이 제약을 **안 고쳐서**, 배포 DB의 낡은 제약이 새 값을 거부한다. (위 "컬럼 타입 변경" 드리프트와 같은 뿌리 — update는 비파괴적 확장만.)
+
+- `SessionStatus`가 `{ACTIVE, DELETED}` → `CLOSED` 추가(지금은 세션 생성 기본값). Neon의 `sessions_status_check`가 옛 값만 허용 → `ERROR: new row for relation "sessions" violates check constraint "sessions_status_check"`.
+- 로컬(`create-drop`)은 매번 새로 구워 통과 → 딱 그 parity 갭.
+- 해결: 배포 DB에서 제약을 현재 enum으로 재생성.
+  ```sql
+  ALTER TABLE sessions DROP CONSTRAINT IF EXISTS sessions_status_check;
+  ALTER TABLE sessions ADD  CONSTRAINT sessions_status_check CHECK (status IN ('ACTIVE','CLOSED','DELETED'));
+  ```
+  근본 대책은 Flyway 등 마이그레이션 도구.

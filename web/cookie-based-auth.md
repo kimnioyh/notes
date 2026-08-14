@@ -68,3 +68,10 @@ Pulse: FE Vercel ↔ BE Render(cross-site). 쿠키 인증 전환 후 로컬 curl
 - [[cors-explained]] — credentials 허용과 정확한 origin 반사
 - [[nextjs-vs-node-fetch]] — SSR에서 인증 쿠키를 수동 포워딩해야 하는 이유
 - [[spring-security-cookie-csrf]] — Spring에서 이 double-submit을 실제 설정하는 법
+
+## /auth/me가 로그에 많은 이유 (+ React StrictMode)
+
+HttpOnly라 FE가 토큰을 못 읽으니, 마운트·라우트 이동·새로고침마다 `/auth/me`로 로그인 상태를 확인한다 → 로그에 자주 뜨는 게 **정상**. 로그아웃 뒤의 `/auth/me -> 401`도 맞는 동작(쿠키가 삭제됨).
+
+- 같은 시각에 **쌍으로** 찍히면 React **StrictMode(dev)**가 effect를 두 번 실행해서다. 프로덕션 빌드에선 안 겹친다.
+- 빈도 자체를 줄이려면 FE에서 react-query `staleTime`/캐시로 dedupe (백엔드 몫 아님).

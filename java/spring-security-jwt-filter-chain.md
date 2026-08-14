@@ -93,3 +93,10 @@ Pulse에서 고친 뒤 실제 검증 결과:
 - [[spring-05-di-autowired]] — 필터·빈 주입
 - [[jpa-lazy-loading]] — 같은 프로젝트(Pulse) 0-2
 - 키워드: `SecurityFilterChain`, `AuthorizationFilter`, `ExceptionTranslationFilter`, stateless, `@PreAuthorize`
+
+## 커스텀(非시큐리티) 필터를 시큐리티 앞/뒤에 두기 — @Order
+
+`@Component extends OncePerRequestFilter`는 기본 order가 `LOWEST_PRECEDENCE`라 시큐리티 `FilterChainProxy`(order **-100**)보다 **뒤(안쪽)**에 등록된다. 그래서 시큐리티가 401/403으로 거부한 요청은 이 필터의 `chain.doFilter`까지 오지도 못한다 — 예: 액세스 로깅 필터가 인증실패 요청을 못 남긴다.
+
+- 해결: `@Order(Ordered.HIGHEST_PRECEDENCE)`로 시큐리티보다 **먼저** 실행 → 시큐리티 체인을 `try/finally`로 감싸므로 거부된 요청도 `finally`에서 최종 status(401/403)까지 로깅.
+- 규칙: **낮은 order = 먼저(바깥), 높은 order = 나중(안쪽).** 응답 status는 체인이 끝난 뒤라야 확정되므로 `finally`에서 읽는다.

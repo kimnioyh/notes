@@ -50,3 +50,14 @@ cors.allowed-origins=${CORS_ALLOWED_ORIGINS:http://localhost:*}
 
 ## 더 볼 것
 - [[spring-security-jwt-filter-chain]]
+
+## 프리플라이트 트리거 조건 (언제 OPTIONS가 뜨나)
+
+프리플라이트는 cross-origin이고 **"단순 요청(simple request)"이 아닐 때**만 뜬다. 아래 중 하나라도 걸리면 발생:
+
+- 메서드가 `PATCH`·`DELETE`·`PUT`
+- 커스텀 헤더 존재 (Pulse: `X-XSRF-TOKEN`, `X-Client-Id`)
+- `Content-Type: application/json` (단순 폼 타입이 아님)
+- 자격증명 동반 (`credentials:'include'` 쿠키)
+
+그래서 Pulse는 상태변경 요청마다 OPTIONS가 붙는다. **브라우저가 자동으로** 보내는 것이고(FE 코드 아님), 서버가 `Access-Control-Allow-*`로 자동 응답한다. 앱 트래픽이 아니라 로그 노이즈라 로깅 필터 `shouldNotFilter`에서 OPTIONS를 스킵한다. same-origin이면 프리플라이트 자체가 없다 → [[proxy-same-origin-cors-csrf]].
