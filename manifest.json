@@ -12,6 +12,12 @@
         "date":  "2026-08-03"
     },
     {
+        "title":  "check-then-insert 레이스와 saveAndFlush로 UNIQUE 위반 잡기",
+        "category":  "design-pattern",
+        "path":  "design-pattern/check-then-insert-race-saveandflush.md",
+        "date":  "2026-08-14"
+    },
+    {
         "title":  "클라이언트 검증(UX) vs 서버 검증(보안)",
         "category":  "design-pattern",
         "path":  "design-pattern/client-vs-server-enforcement.md",
@@ -150,6 +156,12 @@
         "date":  "2026-08-13"
     },
     {
+        "title":  "ddl-auto=update와 enum CHECK 제약 드리프트",
+        "category":  "java",
+        "path":  "java/hibernate-ddl-update-enum-check-drift.md",
+        "date":  "2026-08-14"
+    },
+    {
         "title":  "Hibernate JSON 컬럼 매핑 (@JdbcTypeCode(SqlTypes.JSON))",
         "category":  "java",
         "path":  "java/hibernate-json-column.md",
@@ -264,6 +276,12 @@
         "date":  "2026-08-10"
     },
     {
+        "title":  "Spring Security 필터 순서와 커스텀 필터 등록",
+        "category":  "java",
+        "path":  "java/spring-security-filter-order.md",
+        "date":  "2026-08-14"
+    },
+    {
         "title":  "Spring Security JWT 필터체인과 403 에러 디스패치 함정",
         "category":  "java",
         "path":  "java/spring-security-jwt-filter-chain.md",
@@ -304,6 +322,18 @@
         "category":  "web",
         "path":  "web/cookie-based-auth.md",
         "date":  "2026-08-10"
+    },
+    {
+        "title":  "CORS 프리플라이트 (preflight)",
+        "category":  "web",
+        "path":  "web/cors-preflight.md",
+        "date":  "2026-08-14"
+    },
+    {
+        "title":  "HttpOnly 쿠키 JWT와 /auth/me 세션 복원",
+        "category":  "web",
+        "path":  "web/httponly-cookie-jwt-session-restore.md",
+        "date":  "2026-08-14"
     },
     {
         "title":  "Next.js fetch vs Node.js fetch (같은 표준, 다른 동작)",
