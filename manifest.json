@@ -258,6 +258,12 @@
         "date":  "2026-08-10"
     },
     {
+        "title":  "@AuthenticationPrincipal은 UserDetails 없이도 동작한다",
+        "category":  "java",
+        "path":  "java/spring-security-authentication-principal.md",
+        "date":  "2026-08-20"
+    },
+    {
         "title":  "Spring Security 6 — 쿠키 인증 + CSRF double-submit 설정",
         "category":  "java",
         "path":  "java/spring-security-cookie-csrf.md",
